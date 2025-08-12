@@ -81,7 +81,7 @@ function Datatable({
                                     className="form-checkbox"
                                     aria-label="Select all"
                                     onChange={handleSelectAll}
-                                    checked={selectedRows.length === data.length}
+                                    checked={selectedRows?.length === data?.length}
                                 />
                             </th>
                         )}
