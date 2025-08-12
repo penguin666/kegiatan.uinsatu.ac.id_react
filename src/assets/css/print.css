@@ -1,0 +1,26 @@
+@media print {
+    .no-print { display: none; }
+    .pagebreak {
+        clear: both;
+        page-break-after: always;
+    }
+
+    table { page-break-after:auto }
+    tr    { page-break-inside:avoid; page-break-after:auto }
+    td    { page-break-inside:avoid; page-break-after:auto }
+    thead { display:table-header-group }
+    tfoot { display:table-footer-group }
+
+    table{
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    h4 {page-break-before:always}
+}
+
+td {
+    vertical-align: top;
+}
