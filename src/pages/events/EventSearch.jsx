@@ -145,7 +145,7 @@ export default function EventSearch()
                 </div>
 
                 <div className="flex flex-col mt-3">
-                    <label className="text-gray-700 mb-2">Mode Transportasi</label>
+                    <label className="text-gray-700 mb-2">Moda Transportasi</label>
                     <div className="relative">
                         <div
                             className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
@@ -159,7 +159,7 @@ export default function EventSearch()
                             onChange={(e) => setFormData(prevState => ({...prevState, transport:e.target.value}))}
                             required
                         >
-                            <option value="">Pilih mode transportasi</option>
+                            <option value="">Pilih moda transportasi</option>
                             {transports.map(t => (
                                 <option key={t.value} value={t.value}>{t.label}</option>
                             ))}

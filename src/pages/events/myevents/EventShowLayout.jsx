@@ -62,6 +62,48 @@ export default function EventShowLayout() {
         }
     };
 
+    const downloadTransport = async () => {
+        try {
+            const response = await axios.get(
+                `${BASE_API_URL}/events/${eventId}/participants/download-transport`,
+                {
+                    responseType: 'blob',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        Accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    },
+                }
+            )
+
+            const blob = response.data
+
+            const contentDisposition = response.headers['content-disposition']
+            const filenameMatch = contentDisposition?.match(/filename="?([^"]+)"?/)
+            const filename = filenameMatch
+                ? filenameMatch[1]
+                : `transport-${moment().format('YYYY-MM-DD')}.xlsx`
+
+            const blobUrl = window.URL.createObjectURL(blob)
+
+            const a = document.createElement('a')
+            a.href = blobUrl
+            a.download = filename
+            document.body.appendChild(a)
+            a.click()
+
+            a.remove()
+            window.URL.revokeObjectURL(blobUrl)
+
+            toast.success("Moda transport berhasil diunduh!", { id: "download-transport" })
+        } catch (error) {
+            console.error(error)
+            toast.error(
+                error.response?.data?.message || "Terjadi kesalahan saat mengunduh moda transport.",
+                { id: "download-transport" }
+            )
+        }
+    }
+
     const handleOptionSelect = (option) => {
         if (option.value === 'daftarhadir')
         {
@@ -75,12 +117,17 @@ export default function EventShowLayout() {
         {
             downloadExcel()
         }
+        else if (option.value === 'transport')
+        {
+            downloadTransport()
+        }
     };
 
     const options = [
         { label: "Daftar Hadir", value: "daftarhadir" },
         { label: "CV & Surat Pernyataan", value: "cvnsp" },
         { label: "Download Excel", value: "excel" },
+        { label: "Download Moda Transport", value: "transport" },
     ];
 
     if (!hasPermission('create myevents'))
