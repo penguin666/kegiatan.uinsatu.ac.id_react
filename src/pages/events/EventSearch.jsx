@@ -1,11 +1,12 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import {faCalendar, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import React, {useState} from "react";
 import {get, post} from "../../api/kegiatan.uinsatu.jsx";
 import {toast} from "react-toastify";
 import Modal from "../../components/Modal/Index.jsx";
 import {useAuth} from "../../context/AuthProvider.jsx";
 import moment from "moment";
+import {transports} from "../../config/variable.jsx";
 
 export default function EventSearch()
 {
@@ -14,6 +15,10 @@ export default function EventSearch()
     const [loading, setLoading] = useState(false);
     const [modalShow, setModalShow] = useState(false);
     const [searchedEvent, setSearchedEvent] = useState({});
+    const [formData, setFormData] = useState({
+        code:'',
+        transport:''
+    });
 
     const searchEvent = async (e) => {
         e.preventDefault();
@@ -30,6 +35,7 @@ export default function EventSearch()
             {
                 setModalShow(true);
                 setSearchedEvent(result.data)
+                setFormData(prevState => ({...prevState, code:result.data?.code}))
                 return;
             }
 
@@ -48,7 +54,11 @@ export default function EventSearch()
         e.preventDefault();
         setLoading(true);
         try {
-            const result = await post(`/followed-events/${searchedEvent.id}/participants`, accessToken, {code:searchedEvent.code});
+            if (!formData.transport.trim()) {
+                throw 'Mode transportasi wajib diisi.'
+            }
+
+            const result = await post(`/followed-events/${searchedEvent.id}/participants`, accessToken, formData);
 
             if (result.success)
             {
@@ -133,13 +143,28 @@ export default function EventSearch()
                     <span className="text-gray-500 text-sm">Deskripsi Kegiatan</span>
                     <h4 className="text-gray-700"><strong>{searchedEvent?.description}</strong></h4>
                 </div>
-                <div className="flex flex-col border-b pb-2 mt-3">
-                    <span className="text-gray-500 text-sm">Tanggal Konfirmasi</span>
-                    <h4 className="text-gray-700">
-                        <strong>
-                            {moment(searchedEvent?.confirm_start_date).format('D MMMM Y')} s.d. {moment(searchedEvent?.confirm_end_date).format('D MMMM Y')}
-                        </strong>
-                    </h4>
+
+                <div className="flex flex-col mt-3">
+                    <label className="text-gray-700 mb-2">Mode Transportasi</label>
+                    <div className="relative">
+                        <div
+                            className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
+                            <FontAwesomeIcon icon={faCalendar}/>
+                        </div>
+
+                        <select
+                            name="transport"
+                            value={formData.transport}
+                            className="text-sm placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full md:py-2 py-3 focus:outline-none focus:border-emerald-400"
+                            onChange={(e) => setFormData(prevState => ({...prevState, transport:e.target.value}))}
+                            required
+                        >
+                            <option value="">Pilih mode transportasi</option>
+                            {transports.map(t => (
+                                <option key={t.value} value={t.value}>{t.label}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
             </Modal>
         </>

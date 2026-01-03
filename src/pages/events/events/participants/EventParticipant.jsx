@@ -8,6 +8,8 @@ import {toast} from "react-toastify";
 import EventParticipantFormModal from "./EventParticipantFormModal.jsx";
 import Modal from "/src/components/Modal/Index.jsx";
 import {useOutletContext} from "react-router-dom";
+import {transports} from "../../../../config/variable.jsx";
+import EventParticipantReport from "./EventParticipantReport.jsx";
 
 export default function EventParticipant() {
     const {accessToken} = useAuth();
@@ -40,7 +42,8 @@ export default function EventParticipant() {
 
     const columns = [
         { label: "Username Peserta", key: "username", sortable:true},
-        { label: "Nama Peserta", key: "name", sortable:true}
+        { label: "Nama Peserta", key: "name", sortable:true},
+        { label: "Transport", key: "transport", sortable:true, render: item => transports.find(t => t.value === item.transport)?.label},
     ];
 
     const fetchParticipants = async () => {
@@ -69,9 +72,9 @@ export default function EventParticipant() {
         fetchParticipants();
     }, [page, rowsPerPage, debounceValue, sorting, refresh, event]);
 
-    const handleSubmit = async (selected) => {
+    const handleSubmit = async (formData) => {
         try {
-            const result = await post(`/events/${event.id}/participants`, accessToken, {user_id:selected});
+            const result = await post(`/events/${event.id}/participants`, accessToken, formData);
 
             if (result.success)
             {
@@ -92,7 +95,6 @@ export default function EventParticipant() {
     const handleOnDelete = (item) => {
         setShowConfirm(true);
         setItemToDelete(item);
-        console.log(item)
     }
 
     const handleCanceled = () => {
@@ -134,11 +136,18 @@ export default function EventParticipant() {
                     <h3 className="text-lg font-semibold text-white">Peserta Kegiatan</h3>
                 </div>
 
-                <div className="px-4 md:w-3/4" style={{paddingTop: '20px'}}>
+                <div className="px-4" style={{paddingTop: '20px'}}>
                     <EventParticipantFormModal
                         event={event}
                         handleSubmit={handleSubmit}
                         refresh={refreshChild}
+                    />
+                </div>
+
+                <div className={'m-4'}>
+                    <EventParticipantReport
+                        event={event}
+                        participants={data}
                     />
                 </div>
 

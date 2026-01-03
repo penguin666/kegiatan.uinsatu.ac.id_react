@@ -1,14 +1,15 @@
 import useDebounce from "../../../../hooks/useDebounce.jsx";
 import usePagination from "../../../../hooks/usePagination.jsx";
-import {del, get, post, put} from "../../../../api/kegiatan.uinsatu.jsx";
+import {del, get, post} from "../../../../api/kegiatan.uinsatu.jsx";
 import React, {useEffect, useState} from "react";
 import {useAuth} from "../../../../context/AuthProvider.jsx";
 import Datatable from "../../../../components/Datatables/Datatable.jsx";
 import {toast} from "react-toastify";
 import EventParticipantFormModal from "./EventParticipantFormModal.jsx";
-import MeetingParticipantFormModal from "../../../meetings/meetings/participants/MeetingParticipantFormModal.jsx";
 import Modal from "../../../../components/Modal/Index.jsx";
 import {useOutletContext} from "react-router-dom";
+import {transports} from "../../../../config/variable.jsx";
+import EventParticipantReport from "../../myevents/participants/EventParticipantReport.jsx";
 
 export default function EventParticipant() {
     const {accessToken} = useAuth();
@@ -41,7 +42,8 @@ export default function EventParticipant() {
 
     const columns = [
         { label: "Username Peserta", key: "username", sortable:true},
-        { label: "Nama Peserta", key: "name", sortable:true}
+        { label: "Nama Peserta", key: "name", sortable:true},
+        { label: "Transport", key: "transport", sortable:true, render: item => transports.find(t => t.value === item.transport)?.label},
     ];
 
     const fetchParticipants = async () => {
@@ -70,9 +72,9 @@ export default function EventParticipant() {
         fetchParticipants();
     }, [page, rowsPerPage, debounceValue, sorting, refresh, event]);
 
-    const handleSubmit = async (selected) => {
+    const handleSubmit = async (formData) => {
         try {
-            const result = await post(`/my-events/${event.id}/participants`, accessToken, {user_id:selected});
+            const result = await post(`/my-events/${event.id}/participants`, accessToken, formData);
 
             if (result.success)
             {
@@ -135,11 +137,18 @@ export default function EventParticipant() {
                     <h3 className="text-lg font-semibold text-white">Peserta Kegiatan</h3>
                 </div>
 
-                <div className="px-4 md:w-3/4" style={{paddingTop: '20px'}}>
+                <div className="px-4" style={{paddingTop: '20px'}}>
                     <EventParticipantFormModal
                         event={event}
                         handleSubmit={handleSubmit}
                         refresh={refreshChild}
+                    />
+                </div>
+
+                <div className={'m-4'}>
+                    <EventParticipantReport
+                        event={event}
+                        participants={data}
                     />
                 </div>
 

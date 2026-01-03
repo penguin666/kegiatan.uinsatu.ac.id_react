@@ -3,11 +3,15 @@ import {useAuth} from "/src/context/AuthProvider.jsx";
 import {get} from "/src/api/kegiatan.uinsatu.jsx";
 import {toast} from "react-toastify";
 import Select from "react-select";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCalendar} from "@fortawesome/free-solid-svg-icons";
+import {transports} from "../../../../config/variable.jsx";
 
 export default function EventParticipantFormModal({ handleSubmit, event, refresh}) {
     const {accessToken} = useAuth();
     const [loading, setLoading] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState([]);
+    const [transport, setTransport] = useState('');
     const [options, setOptions] = useState([]);
 
     const fetchOptions = async () => {
@@ -48,7 +52,7 @@ export default function EventParticipantFormModal({ handleSubmit, event, refresh
         e.preventDefault();
         setLoading(true)
         const selected = selectedOptions.map(option => option.id)
-        const res = await handleSubmit(selected);
+        const res = await handleSubmit({user_id:selected, transport});
         if (res)
         {
             clearSelection();
@@ -59,7 +63,7 @@ export default function EventParticipantFormModal({ handleSubmit, event, refresh
     return (
         <form onSubmit={onSubmit}>
             <h3 className="pb-2">Tambah Peserta Kegiatan</h3>
-            <div className="flex md:flex-row flex-col gap-2">
+            <div className="flex md:flex-row flex-col gap-2 w-full">
                 <div className="w-full items-center">
                     <Select
                         isMulti
@@ -74,7 +78,29 @@ export default function EventParticipantFormModal({ handleSubmit, event, refresh
                     />
                 </div>
 
-                <div className="pb-5 items-center flex">
+                <div className="flex flex-col w-full">
+                    <div className="relative">
+                        <div
+                            className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
+                            <FontAwesomeIcon icon={faCalendar}/>
+                        </div>
+
+                        <select
+                            name="transport"
+                            value={transport}
+                            className="text-base placeholder-gray-500 pl-10 pr-4 rounded border border-gray-400 w-full md:py-2 py-3 focus:outline-none focus:border-emerald-400"
+                            onChange={(e) => setTransport(e.target.value)}
+                            required
+                        >
+                            <option value="">Pilih mode transportasi</option>
+                            {transports.map(t => (
+                                <option key={t.value} value={t.value}>{t.label}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <div>
                     <button
                         type="submit"
                         className="disabled:bg-emerald-300 px-5 py-2 text-white rounded bg-emerald-600 text-sm flex items-center gap-1"

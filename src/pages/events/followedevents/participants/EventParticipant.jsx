@@ -6,6 +6,7 @@ import {useAuth} from "/src/context/AuthProvider.jsx";
 import Datatable from "/src/components/Datatables/Datatable.jsx";
 import {toast} from "react-toastify";
 import {useOutletContext} from "react-router-dom";
+import {transports} from "../../../../config/variable.jsx";
 
 export default function EventParticipant() {
     const [event] = useOutletContext();
@@ -31,7 +32,8 @@ export default function EventParticipant() {
 
     const columns = [
         { label: "Username Peserta", key: "username", sortable:true},
-        { label: "Nama Peserta", key: "name", sortable:true}
+        { label: "Nama Peserta", key: "name", sortable:true},
+        { label: "Transport", key: "transport", sortable:true, render: item => transports.find(t => t.value === item.transport)?.label},
     ];
 
     const fetchParticipants = async () => {

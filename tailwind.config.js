@@ -2,7 +2,7 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
-  content: ['./resources/**/*.jsx', './resources/**/*.blade.php'],
+  content: ['./src/**/*.jsx', './resources/**/*.blade.php'],
   theme: {
     extend: {
       fontFamily: {

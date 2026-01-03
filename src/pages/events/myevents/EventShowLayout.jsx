@@ -12,7 +12,7 @@ import EventShow from "./EventShow.jsx";
 import DropdownButton from "/src/components/DropdownButton/Index.jsx";
 import axios from "axios";
 import {BASE_API_URL} from "../../../config/variable.jsx";
-import moment from "moment/moment.js";
+import moment from "moment";
 
 export default function EventShowLayout() {
     let { eventId } = useParams();
