@@ -34,21 +34,21 @@ function UserFormModal({ show, handleClose, handleSubmit }) {
     };
 
     const columns = [
-        { label: "SIMAK ID", key: "simak_id", sortable:true, className:"d-none d-sm-table-cell"},
+        { label: "SIMAK ID", key: "ID", sortable:true, className:"d-none d-sm-table-cell"},
         { label: "Username", key: "username", sortable:true},
-        { label: "Nama", key: "name", sortable:true},
-        { label: "Status", key: "role_name", sortable:true},
+        { label: "Nama", key: "fullName", sortable:true},
+        { label: "Tanggal Lahir", key: "dateOfBirth", sortable:true},
     ];
 
     const fetchData = async () => {
         setLoading(true)
         try {
-            const result = await get(`/sso/users?page=${page}&size=${rowsPerPage}&sortBy=${sorting.sortBy}&sortOrder=${sorting.sortOrder}&term=${search}`, accessToken, {});
+            const result = await get(`/simak/users?page=${page}&size=${rowsPerPage}&sortBy=${sorting.sortBy}&sortOrder=${sorting.sortOrder}&term=${search}`, accessToken, {});
 
             if (result.success)
             {
                 setData(result.data.data)
-                setTotal(result.data.total)
+                setTotal(result.data.recordsFiltered)
             }
             else
             {
