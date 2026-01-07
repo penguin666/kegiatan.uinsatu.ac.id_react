@@ -115,7 +115,7 @@ export default function EventEvidence() {
                                     <div className={'text-slate-700'}>Nama Dokumen</div>
                                     <div
                                         className={'uppercase font-semibold'}>{type === '1' ? 'BIODATA' : 'SURAT PERNYATAAN'} KEGIATAN {data?.name} Tanggal {moment(data?.event_start_date).format('LL')} sampai
-                                        dengan {moment(data?.event_end_date).format('LL')} di {data?.city_signature}</div>
+                                        dengan {moment(data?.event_end_date).format('LL')} di {data?.event_place} {data?.city_signature}</div>
                                 </div>
                                 <div className={'border-b py-2'}>
                                     <div className={'text-slate-700'}>Nama Pemilik</div>
