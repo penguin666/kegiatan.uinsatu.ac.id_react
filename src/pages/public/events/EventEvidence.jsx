@@ -75,7 +75,7 @@ export default function EventEvidence() {
                         <div className="space-y-6 text-justify text-base leading-relaxed">
                             <p className="font-semibold">
                                 Dokumen ini ASLI dan RESMI diterbitkan oleh
-                                UIN SAYID ALI RAHMATULLAH TULUNGAGUNG.
+                                UIN SAYYID ALI RAHMATULLAH TULUNGAGUNG.
                             </p>
 
                             <p className="font-semibold">
@@ -141,7 +141,7 @@ export default function EventEvidence() {
                 }
 
                 <div className="absolute bottom-8 left-12 right-12 border-t pt-4">
-                    <p className={' text-sm'}>UIN Sayid Ali Rahmatullah Tulungagung</p>
+                    <p className={' text-sm'}>UIN Sayyid Ali Rahmatullah Tulungagung</p>
                     <p className={'text-xs text-slate-500 italic break-all whitespace-pre-wrap'}>{fullURL}</p>
                 </div>
             </div>
