@@ -101,6 +101,8 @@ const PublicGuestBookLayout = lazy(() => import('./pages/public/guestbook/GuestB
 const PublicGuestBookIndex = lazy(() => import('./pages/public/guestbook/Index.jsx'));
 const PublicGuestBookSuccess = lazy(() => import('./pages/public/guestbook/Success.jsx'));
 
+const PublicEventEvidence = lazy(() => import('./pages/public/events/EventEvidence.jsx'));
+
 function App() {
     const { accessToken } = useAuth();
 
@@ -245,9 +247,11 @@ function App() {
                     <Route path="/auth/login" element={<Login />}></Route>
                     <Route path="/auth/login-sso" element={<LoginSso />} />
 
+                    <Route path="/common/events/:eventCode/participants/:username/types/:type" element={<PublicEventEvidence />} />
+
                     <Route element={<PublicGuestBookLayout />}>
-                        <Route path="/common/guest-books/form" element={<PublicGuestBookIndex />}></Route>
-                        <Route path="/common/guest-books/success" element={<PublicGuestBookSuccess />}></Route>
+                        <Route path="/common/guest-books/form" element={<PublicGuestBookIndex />} />
+                        <Route path="/common/guest-books/success" element={<PublicGuestBookSuccess />} />
                     </Route>
                 </Route>
 
