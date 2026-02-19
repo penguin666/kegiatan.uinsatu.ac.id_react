@@ -1,11 +1,11 @@
 import '/src/assets/css/print.css'
 import moment from "moment";
 import {setMomentLocaleID} from '/src/config/locale.jsx'
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import {QRCodeSVG} from "qrcode.react";
 
 export default function PrintEventSp({event, profile, no}) {
     setMomentLocaleID();
-
     const [position, setPosition] = useState(null);
     const [functional, setFunctional] = useState(null);
 
@@ -82,7 +82,12 @@ export default function PrintEventSp({event, profile, no}) {
 
                         <div style={{margin: '25pt 0 0 50%'}}>
                             <span>{event.city_signature}, {moment(event.event_start_date).format('D MMMM Y')}<br/>Peserta,</span>
-                            <br/><br/><br/><br/>
+                            <div className={''}>
+                                <QRCodeSVG
+                                    value={`${window.location.origin}/common/events/${event?.code}/participants/${profile?.profile?.username}/types/2`}
+                                    className="w-20"
+                                />
+                            </div>
                             <span>{profile?.profile?.fullName}</span>
                             <br/>
                             <span>NIP {profile?.profile?.username}</span>
